@@ -9,7 +9,9 @@ import {
 } from '../../store/actions/index';
 import { HookForm } from '../form/Hookform';
 import Storage from '../../service/Storage';
+import getBUSD from '../../service/BUSDService';
 import generalCss from '../general.module.css';
+import Navbar from '../header/Navbar';
 
 
 const schemaNew = {
@@ -43,6 +45,7 @@ const InsuranceApply = (props) => {
     // initialiaze the schema data
     useEffect(() => {
         dispatch(updateSchemaData(schemaNew)); return () => { };
+        console.log('getBUSD', getBUSD());
     }, []);
 
     async function submitData() {
@@ -106,7 +109,7 @@ const InsuranceApply = (props) => {
 
     return (<Fragment>
         <div style={{ height: '100vh' }}>
-
+            <Navbar />
             <div className={` ${centerDiv}`} style={{ justifyContent: 'center' }}>
 
                 {/* title heading */}
@@ -133,7 +136,7 @@ const InsuranceApply = (props) => {
                                     </div>
                                     <div className="row">
                                         <div className={`form-group ${has_search} `}>
-                                            {renderHInput('Estimated Cost', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Estimated cost of insurance', 'text', 'estimatedCost', inputs, errors,
+                                            {renderHInput('Estimated Cost', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Estimated cost ($)', 'text', 'estimatedCost', inputs, errors,
                                                 <span className={`${dIcon_feedback} `}><img src={inputL} alt="estimate-cost" width='15' /></span>)}
 
                                             {/* error */}
@@ -143,7 +146,7 @@ const InsuranceApply = (props) => {
                                     </div>
                                     <div className="row my-4">
                                         <div className={` form-group ${has_search}`}>
-                                            {renderHInput('Estimated Tenure', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Estimated tenure f insurance', 'text', 'estimatedTenure', inputs, errors,
+                                            {renderHInput('Estimated Tenure', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Estimated tenure of insurance (months)', 'text', 'estimatedTenure', inputs, errors,
                                                 <span className={`${dIcon_feedback} `}><img src={inputL} alt="estimate-cost" width='15' /></span>)}
 
                                             {/* error */}
@@ -154,7 +157,7 @@ const InsuranceApply = (props) => {
 
                                     <div className="row">
                                         <div className={` form-group ${has_search}`}>
-                                            {renderHInputDisabled('Initial deposit(BUSD) 10% of Estimated Cost', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Estimated tenure of insurance', 'text', 'initialDeposit', inputs, errors,
+                                            {renderHInputDisabled('Initial deposit(BUSD) 10% of Estimated Cost', `${employInfoLeftIn} ${dIcon} mr-sm-2`, '', 'Initial deposit (BUSD) 10% of Estimated Cost', 'text', 'initialDeposit', inputs, errors,
                                                 <span className={`${dIcon_feedback} `}><img src={inputL} alt="estimate-cost" width='15' /></span>)}
 
                                             {/* error */}
@@ -175,7 +178,7 @@ const InsuranceApply = (props) => {
                                     </div>
 
                                     <div className="text-center" style={{ marginTop: '3vh', width: '100%' }} >
-                                        {renderButtonH("", "Submit", `${formSubmitButton} ml-2`, disableSubmitBtn, "submit", {})}
+                                        {renderButtonH("", "Deposit / Submit", `${formSubmitButton} ml-2`, disableSubmitBtn, "submit", {})}
 
                                     </div>
                                 </div>

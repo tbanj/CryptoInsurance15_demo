@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/index';
 const initialState = {
-    status: false, posts: [], submitBTN: false, schemaDetail: {}, userData: [], insureData: {}
+    status: false, posts: [], submitBTN: false, schemaDetail: {}, userData: [], insureData: {},
+    metaMaskState: { isConnected: false, selectedAddress: undefined, chainId: undefined }
 }
 // const [userToken, setUserToken] = useState({});
 
@@ -21,6 +22,11 @@ const reducer = (state = initialState, action) => {
             const schemaData = Object.assign({}, state);
             schemaData.schemaDetail = action.payload;
             return schemaData;
+
+        case actionTypes.METAMASK_DATA:
+            const metaState = Object.assign({}, state);
+            metaState.metaMaskState = action.payload;
+            return metaState;
 
         case actionTypes.USER_INSURE_REC:
             const userInsureRec = Object.assign({}, state);

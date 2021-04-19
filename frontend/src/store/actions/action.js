@@ -38,6 +38,11 @@ export const updateSubmitBTNState = (data) => {
     return { type: actionTypes.SUBMIT_BTN_STATE, payload: data };
 }
 
+export const updateMetamaskData = (data: any) => {
+    return { type: actionTypes.METAMASK_DATA, payload: data };
+}
+
+
 // schema detail
 export const updateSchemaData = (data) => {
     return { type: actionTypes.FORM_SCHEMA_DATA, payload: data }
