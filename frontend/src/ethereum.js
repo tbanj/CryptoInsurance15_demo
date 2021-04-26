@@ -18,7 +18,8 @@ const getBlockchain = () =>
             const signer = provider.getSigner();
             /*  to check a user address
             ethereum.selectedAddress. */
-
+            console.log('networkId', _Insurengine.networks);
+            console.log('_Insurengine.networks[networkId].address', _Insurengine.networks[networkId].address);
             if (_Insurengine.networks[networkId]) {
                 const _insurengine = new Contract(
                     _Insurengine.networks[networkId].address,
@@ -27,14 +28,14 @@ const getBlockchain = () =>
                 );
                 // console.log('{ _insurengine }', { _insurengine }, _Insurengine.networks[networkId].address);
                 console.log('provider', provider);
-                resolve({ _insurengine, provider });
+                resolve({ _insurengine, provider, signer });
                 return;
             } else {
                 const _insurengine = { data: 'Select Required Metamask network' };
                 console.log('{ _insurengine }', { _insurengine });
                 // console.log(ethereum.isMetaMask);
 
-                resolve({ _insurengine, provider });
+                resolve({ _insurengine, provider, signer });
                 return;
             }
 

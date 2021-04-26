@@ -9,7 +9,7 @@ import {
 } from '../../store/actions/index';
 import { HookForm } from '../form/Hookform';
 import Storage from '../../service/Storage';
-import getBUSD from '../../service/BUSDService';
+import { initialDeposit, getTokenBalan } from '../../service/BUSDService';
 import generalCss from '../general.module.css';
 import Navbar from '../header/Navbar';
 
@@ -19,23 +19,22 @@ const schemaNew = {
     insureName: Joi.string().required().min(3).label("Insure Name"),
     estimatedCost: Joi.string().required().min(3).label("Estimated Cost"),
     estimatedTenure: Joi.string().required().min(1).label("Estimated Tenure"),
-    insurerAddress: Joi.string().required().min(3).default('0x0fd46577').label("Insurer Engine Address"),
+    insurerAddress: Joi.string().required().min(3).default('0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73').label("Insurer Engine Address"),
     initialDeposit: Joi.string().required().default(0).min(1).label("'Initial deposit(BUSD) 10%"),
 
 
 }
 
-const localData = new Storage();
+// const localData = new Storage();
 
 const InsuranceApply = (props) => {
 
-    const { centerDiv, divRelative, userImageBG, columnBox, has_search,
-        employInfoLeftIn, dIcon_feedback, dIcon, formSubmitButton, formTitleBold, btnLoadIcon,
-        formFieldContainer, validationErrMsg } = generalCss;
+    const { centerDiv, divRelative, has_search,
+        employInfoLeftIn, dIcon_feedback, dIcon, formSubmitButton, validationErrMsg } = generalCss;
     const dispatch = useDispatch();
     const [userData, setUserData] = useState({
         insureName: undefined, estimatedCost: undefined,
-        estimatedTenure: undefined, insurerAddress: '0x0fd46577', initialDeposit: '0',
+        estimatedTenure: undefined, insurerAddress: '0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73', initialDeposit: '0',
     });
     const { disableSubmitBtn, userDatar } = useSelector(state => ({
         disableSubmitBtn: state.submitBTN,
@@ -45,17 +44,37 @@ const InsuranceApply = (props) => {
     // initialiaze the schema data
     useEffect(() => {
         dispatch(updateSchemaData(schemaNew)); return () => { };
-        console.log('getBUSD', getBUSD());
+
     }, []);
+
+    // check if it has minimum amount required is available in the customer account
+    async function checkMinDeposit() {
+        try {
+            const tokenBal = await getTokenBalan();
+            console.log('Number(tokenBal)', Number(tokenBal));
+            if (tokenBal < inputs.initialDeposit) {
+                throw new Error('Kindly fund your account');
+            }
+            return;
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
 
     async function submitData() {
         try {
+
             if (inputs.estimatedCost && inputs.estimatedTenure) {
 
                 // SUBMIT_BTN_STATE
-                dispatch(updateSubmitBTNState(true));
-                await dispatch(storeInsurerPack({ ...inputs }));
-                props.history.push('/insure-list')
+                // dispatch(updateSubmitBTNState(true));
+
+                // const estVal= ((parseFloat(inputs.estimatedCost)) * 0.1).toFixed(4) ;
+                checkMinDeposit();
+
+                // initialDeposit(inputs.initialDeposit);
+                // await dispatch(storeInsurerPack({ ...inputs }));
+                // props.history.push('/insure-list');
             } else {
                 toast.error("invalid data inputted in 1 of the records")
                 dispatch(updateSubmitBTNState(false));
@@ -71,6 +90,8 @@ const InsuranceApply = (props) => {
 
     useEffect(() => {
 
+
+
         async function getData() {
             try {
                 await setInputs({ ...userData });
@@ -79,13 +100,17 @@ const InsuranceApply = (props) => {
             }
         }
 
+
         if (inputs.estimatedCost !== undefined && (parseFloat(inputs.estimatedCost)).constructor.name === "Number") {
             if ((parseFloat(inputs.estimatedCost)).constructor.name === "Number") {
                 setInputs({ ...inputs, initialDeposit: ((parseFloat(inputs.estimatedCost)) * 0.1).toFixed(4) });
             }
         }
 
+        // checkMinDeposit();
         getData();
+
+
         return () => {
 
         }
@@ -113,7 +138,7 @@ const InsuranceApply = (props) => {
             <div className={` ${centerDiv}`} style={{ justifyContent: 'center' }}>
 
                 {/* title heading */}
-                <div className={`card  `}>
+                <div className={`card  col-md-4`}>
                     <div className="px-4">
                         <h2 className="my-4">Insurance Application</h2>
 

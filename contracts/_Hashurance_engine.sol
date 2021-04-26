@@ -157,7 +157,7 @@ contract _Insurengine{
         hashuranceToken.transferFrom(address(destinationPolicy), destinationPolicy.policy_Holder(), destinationPolicy.Principal());
     }
 
-    // to check network selected
+     // to check network selected
     function checkNetwork() external view returns(bool) {
     return networkTypeBSC;
   }
@@ -167,4 +167,22 @@ function getHashTokenName() external view returns(string memory) {
     return hashuranceToken.getTokenName();
       
   }
+
+  // return all the list of policies
+  function getPolicies() public view returns(Policy[] memory) {
+    return policyArchieve;
+  }
+
+
+// return list of policy for a particular user
+  function getPolicy() public view returns(Policy[] memory) {
+    return policyArchieve;
+  }
+
+  // return total count of all policies
+  function getPoliciesCount() public view returns(uint) {
+    uint countPolicy = policyArchieve.length;
+    return countPolicy;
+  }
+
 }

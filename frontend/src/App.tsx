@@ -1,10 +1,12 @@
-import React, { useState, useEffect, Fragment, Suspense, lazy } from 'react';
+import React, { Fragment, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { ToastContainer } from "react-toastify";
 import getBlockchain from './ethereum';
 // import env from './env';
 import * as actions from './store/actions/index';
+import { storeSigner } from './service/helper';
 import InsuranceApply from './components/insuranceApply/InsuranceApply';
 import Home from './components/Home/Home';
 import InsureListAndPolicy from './components/insureListAndPolicy/InsureListAndPolicy';
@@ -13,7 +15,7 @@ import NoMatch from './components/notfound/NotFound';
 import ErrorBoundary from './components/errorBoundary/ErrorBoundary';
 import "react-toastify/dist/ReactToastify.css";
 import './App.css';
-import { connect } from 'react-redux';
+
 
 
 
@@ -46,7 +48,10 @@ export interface ImetaProps {
 
 // type ImetamaskData { isConnected: boolean, selectedAddress: string | undefined, chainId: string | undefined }
 
-export interface ImetamaskData { isConnected: boolean, selectedAddress: string | undefined, chainId: string | undefined }
+export interface ImetamaskData {
+    isConnected: boolean, selectedAddress: string | undefined, chainId: string | undefined,
+    hashuranceContractAddress: string | undefined
+}
 
 
 export interface ImetaMaskState { metaMaskState: ImetamaskData }
@@ -73,7 +78,7 @@ class App extends React.Component<Props, State> {
     }
 
     init = async () => {
-        const { _insurengine, provider }: { _insurengine: any, provider: any } = await getBlockchain();
+        const { _insurengine, provider, signer }: { _insurengine: any, provider: any, signer: any } = await getBlockchain();
         if ('checkNetwork()' in _insurengine === false) {
             this.setState({
                 _insurengine, data: 'Select Binance Smart Chain Test Network Required'
@@ -86,14 +91,17 @@ class App extends React.Component<Props, State> {
         }
 
         // const dataTest = await Promise.all([_insurengine.checkNetwork(), _insurengine.totalSupply(), _insurengine.getHashTokenName()]);
-        console.log('provider check metamask now', provider.provider);
+        console.log('provider check metamask now', _insurengine);
         const dataTest = await Promise.all([_insurengine.checkNetwork()]);
         console.log('dataTest', dataTest[0]);
         const metamaskUpdate: ImetamaskData = {
             isConnected: provider.provider.isConnected(), selectedAddress: provider.provider.selectedAddress,
-            chainId: provider.provider.chainId
+            chainId: provider.provider.chainId, hashuranceContractAddress: _insurengine.address
         };
         await this.props.updateMetamask(metamaskUpdate) as ImetamaskData;
+        console.log('signer', signer);
+
+        storeSigner(signer);
         this.setState({ _insurengine, bscState: dataTest[0] });
     };
 

@@ -1,38 +1,92 @@
 import { ethers, Contract } from 'ethers';
 import bUSD_ABI from '../contracts/_BUSD.json';
-
+import env from '../env';
+import { getSelectedAccount, getSigner, getStoreDetails } from './helper';
 let hashuranceABI, hashuranceAddress, hashurancecontract;
+const _to = env.hashurance_address;
 
-async function initiateBUSD() {
+const bUSDAddress = env.busd_address;
+const bUSDcontract = new Contract(
+    bUSDAddress,
+    bUSD_ABI.abi,
+    getSigner() // this will help us send transaction thereby making our communication to be secure
+);
+
+async function initialDeposit(amt) {
     try {
-        console.log('0.1 * 2000', 0.1 * 2000);
-        var amount = Number(0.1 * 2000); //10% of estimated cost. //Watch out for decimals when sending an amount.
-        await payBUS(amount)
-        // await payBUSD(amount)
-        // var receipt_ = await composeReceipt();
-        // await apply(receipt_);
+        //  get details from redux store
+        const { metaMaskState } = getStoreDetails();
+        const pwr = 10 ** 18;
+        const account = metaMaskState.selectedAddress;
+        const amountPaid = await payBUSD((pwr * amt).toString(), account);
+        //10% of estimated cost. //Watch out for decimals when sending an amount.
+        console.log('amountPaid', amountPaid);
+
+        let receipt_ = await composeReceipt(amountPaid, account, _to, amt);
+        await apply(receipt_);
     } catch (error) {
         console.log(error);
     }
 }
 
-async function payBUSD(deposite) {
-    console.log('bUSD_ABI we are here');
-    console.log('bUSD_ABI m', bUSD_ABI.abi[0].payable);
+/* let bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
+        const busd = new Contract(
+          bUSDAddress,
+          _BUSD.abi,
+          signer // this will help us send transaction thereby making our communication to be secure
+        ); */
 
-    var bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee';
-    var bUSDcontract = await new window.web3.eth1.Contract(bUSD_ABI.abi, bUSDAddress);
+
+async function payBUSD(deposite, account) {
+    console.log('ehehhe', env);
+
     console.log('bUSDcontract', bUSDcontract);
-    // const account = await getCurrentAccount();
-    var _to = '0xf49cF1a41604fe8b4db9C68551E5be493BEB6956';
+
     //var estimatedCost = Number(2000);
-    // var _receipt = await bUSDcontract.methods.transfer(_to, deposite).send({ from: account });
-    // console.log(_receipt);
+    // const totalSup = await bUSDcontract.totalSupply()
+
+    // await getTotalSupply(bUSDcontract);
+    // await getTokenBalan(bUSDcontract, '0x2Ce1d0ffD7E869D9DF33e28552b12DdDed326706');
+    await creditContractWithBUSD(bUSDcontract, account, _to, deposite);
+    console.log('deposite', deposite, 'account', account);
+
     // updateStatus('Verifying payment...');
     // return _receipt;
 }
 
-function composeReceipt(receipt) {
+async function getTotalSupply() {
+    const totalSup = await bUSDcontract.totalSupply();
+    console.log(Number(totalSup));
+}
+
+async function getTokenBalan(account) {
+    try {
+        console.log('account', account);
+        const bUSDAddressd = env.busd_address;
+        const bUSDcontractd = new Contract(
+            bUSDAddressd,
+            bUSD_ABI.abi,
+            getSigner() // this will help us send transaction thereby making our communication to be secure
+        );
+        const balance = await bUSDcontractd.balanceOf(account);
+        console.log(Number(balance));
+        return balance;
+    } catch (error) {
+        console.log('error', error);
+    }
+}
+
+async function creditContractWithBUSD(bUSDcontract, account, _to, deposite) {
+    try {
+        let _receipt = await bUSDcontract.transfer(_to, deposite).send({ from: '0x424e4a2ad3a92ce9b4b617155db224ef34a53410' });
+        // let _receipt = await bUSDcontract.methods.transfer(_to, deposite).send({ from: account });
+        console.log('_receipt', _receipt);
+    } catch (error) {
+
+    }
+}
+
+function composeReceipt(receipt, _account, _to, _amount) {
     //Create receipt template.
     /* e.g
     {
@@ -46,15 +100,17 @@ function composeReceipt(receipt) {
     }*/
 
     console.log('composeReceipt, func to build receipt', receipt);
-    /*  var receiptSummary =  {};
-     receiptSummary.blockNumber = receipt.blockNumber;
-     receiptSummary.from_ = account;
-     receiptSummary.to_ = receipt.to; //BUSD contract address;
-     receiptSummary.receiver = _to;  //receiver's address;
-     receiptSummary.paymentTime = 1; //new Date().getTime(); Slight difference with the blockchain's timestammp.
-     receiptSummary.value = amount;
-     receiptSummary.transactionHash = receipt.transactionHash; 
-     return receiptSummary; */
+    let receiptSummary = {};
+    receiptSummary.blockNumber = receipt.blockNumber;
+    receiptSummary.from_ = _account;
+    receiptSummary.to_ = receipt.to; //BUSD contract address;
+    receiptSummary.receiver = _to;  //receiver's address;
+    receiptSummary.paymentTime = 1; //new Date().getTime(); Slight difference with the blockchain's timestammp.
+    receiptSummary.value = _amount;
+    receiptSummary.transactionHash = receipt.transactionHash;
+
+    console.log('receiptSummary', receiptSummary);
+    return receiptSummary;
 }
 
 
@@ -99,10 +155,10 @@ async function apply(receipt) {
 async function payBUS(deposite) {
     //Fill application form before this.
     // updateStatus(`Processing payment...`);
-    var bUSD_AB = [{ "constant": false, "inputs": [], "name": "disregardProposeOwner", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "name", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "approve", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "assetProtectionRole", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "r", "type": "bytes32[]" }, { "name": "s", "type": "bytes32[]" }, { "name": "v", "type": "uint8[]" }, { "name": "to", "type": "address[]" }, { "name": "value", "type": "uint256[]" }, { "name": "fee", "type": "uint256[]" }, { "name": "seq", "type": "uint256[]" }, { "name": "deadline", "type": "uint256[]" }], "name": "betaDelegatedTransferBatch", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "sig", "type": "bytes" }, { "name": "to", "type": "address" }, { "name": "value", "type": "uint256" }, { "name": "fee", "type": "uint256" }, { "name": "seq", "type": "uint256" }, { "name": "deadline", "type": "uint256" }], "name": "betaDelegatedTransfer", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "initializeDomainSeparator", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "unpause", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_addr", "type": "address" }], "name": "unfreeze", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "claimOwnership", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_newSupplyController", "type": "address" }], "name": "setSupplyController", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "paused", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "_addr", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "initialize", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [], "name": "pause", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getOwner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "target", "type": "address" }], "name": "nextSeqOf", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_newAssetProtectionRole", "type": "address" }], "name": "setAssetProtectionRole", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_addr", "type": "address" }], "name": "freeze", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [{ "name": "", "type": "string" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_newWhitelister", "type": "address" }], "name": "setBetaDelegateWhitelister", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_value", "type": "uint256" }], "name": "decreaseSupply", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_addr", "type": "address" }], "name": "isWhitelistedBetaDelegate", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transfer", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_addr", "type": "address" }], "name": "whitelistBetaDelegate", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_proposedOwner", "type": "address" }], "name": "proposeOwner", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [{ "name": "_value", "type": "uint256" }], "name": "increaseSupply", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "betaDelegateWhitelister", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "proposedOwner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_addr", "type": "address" }], "name": "unwhitelistBetaDelegate", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }, { "name": "_spender", "type": "address" }], "name": "allowance", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_addr", "type": "address" }], "name": "wipeFrozenAddress", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "EIP712_DOMAIN_HASH", "outputs": [{ "name": "", "type": "bytes32" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "_addr", "type": "address" }], "name": "isFrozen", "outputs": [{ "name": "", "type": "bool" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "supplyController", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "reclaimBUSD", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "owner", "type": "address" }, { "indexed": true, "name": "spender", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "currentOwner", "type": "address" }, { "indexed": true, "name": "proposedOwner", "type": "address" }], "name": "OwnershipTransferProposed", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldProposedOwner", "type": "address" }], "name": "OwnershipTransferDisregarded", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldOwner", "type": "address" }, { "indexed": true, "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [], "name": "Pause", "type": "event" }, { "anonymous": false, "inputs": [], "name": "Unpause", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "addr", "type": "address" }], "name": "AddressFrozen", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "addr", "type": "address" }], "name": "AddressUnfrozen", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "addr", "type": "address" }], "name": "FrozenAddressWiped", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldAssetProtectionRole", "type": "address" }, { "indexed": true, "name": "newAssetProtectionRole", "type": "address" }], "name": "AssetProtectionRoleSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "SupplyIncreased", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "SupplyDecreased", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldSupplyController", "type": "address" }, { "indexed": true, "name": "newSupplyController", "type": "address" }], "name": "SupplyControllerSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }, { "indexed": false, "name": "seq", "type": "uint256" }, { "indexed": false, "name": "fee", "type": "uint256" }], "name": "BetaDelegatedTransfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldWhitelister", "type": "address" }, { "indexed": true, "name": "newWhitelister", "type": "address" }], "name": "BetaDelegateWhitelisterSet", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "newDelegate", "type": "address" }], "name": "BetaDelegateWhitelisted", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "oldDelegate", "type": "address" }], "name": "BetaDelegateUnwhitelisted", "type": "event" }];
-    var bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee';
-    var bUSDcontract = await new window.web3.eth1.Contract(bUSD_AB, bUSDAddress);
-    console.log('bUSDcontract', bUSDcontract);
+
+    // var bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee';
+    // var bUSDcontract = await new window.web3.eth1.Contract(bUSD_AB, bUSDAddress);
+    // console.log('bUSDcontract', bUSDcontract);
     // const account = await getCurrentAccount();
     // var _to = '0xf49cF1a41604fe8b4db9C68551E5be493BEB6956';
     // //var estimatedCost = Number(2000);
@@ -115,4 +171,4 @@ async function payBUS(deposite) {
 
 
 // initiateBUSD();
-export default initiateBUSD()
+export { initialDeposit, getTokenBalan }
