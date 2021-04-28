@@ -2,56 +2,47 @@ import { ethers, Contract } from 'ethers';
 import bUSD_ABI from '../contracts/_BUSD.json';
 import env from '../env';
 import { getSelectedAccount, getSigner, getStoreDetails } from './helper';
-let hashuranceABI, hashuranceAddress, hashurancecontract;
+let hashuranceABI, hashuranceAddress, hashuranceContract;
 const _to = env.hashurance_address;
 
-const bUSDAddress = env.busd_address;
-const bUSDcontract = new Contract(
-    bUSDAddress,
-    bUSD_ABI.abi,
-    getSigner() // this will help us send transaction thereby making our communication to be secure
-);
-
-async function initialDeposit(amt) {
-    try {
-        //  get details from redux store
-        const { metaMaskState } = getStoreDetails();
-        const pwr = 10 ** 18;
-        const account = metaMaskState.selectedAddress;
-        const amountPaid = await payBUSD((pwr * amt).toString(), account);
-        //10% of estimated cost. //Watch out for decimals when sending an amount.
-        console.log('amountPaid', amountPaid);
-
-        let receipt_ = await composeReceipt(amountPaid, account, _to, amt);
-        await apply(receipt_);
-    } catch (error) {
-        console.log(error);
-    }
+let bUSDcontract;
+function initiateBUSDContract() {
+    const bUSDAddress = env.busd_address;
+    bUSDcontract = new Contract(
+        bUSDAddress,
+        bUSD_ABI.abi,
+        getSigner() // this will help us send transaction thereby making our communication to be secure
+    );
+    return bUSDcontract;
 }
 
-/* let bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
-        const busd = new Contract(
-          bUSDAddress,
-          _BUSD.abi,
-          signer // this will help us send transaction thereby making our communication to be secure
-        ); */
+function initializeHashurance() {
+    hashuranceContract = new Contract(hashuranceABI, hashuranceAddress);
+    return hashuranceContract;
+}
 
 
-async function payBUSD(deposite, account) {
-    console.log('ehehhe', env);
+async function initialDeposit(amt) {
 
-    console.log('bUSDcontract', bUSDcontract);
+    const { metaMaskState } = getStoreDetails();
+    const pwr = 10 ** 18;
+    const account = metaMaskState.selectedAddress;
+    //10% of estimated cost. //Watch out for decimals when sending an amount.
+    let receipt_ = await composeReceipt(await payBUSD((pwr * amt).toString(), account, bUSDcontract), account, _to, amt);
+    if (receipt_ === undefined) throw new Error('Unable to generate receipt');
+    // await apply(receipt_);
+    return receipt_;
+}
 
-    //var estimatedCost = Number(2000);
-    // const totalSup = await bUSDcontract.totalSupply()
-
-    // await getTotalSupply(bUSDcontract);
-    // await getTokenBalan(bUSDcontract, '0x2Ce1d0ffD7E869D9DF33e28552b12DdDed326706');
-    await creditContractWithBUSD(bUSDcontract, account, _to, deposite);
-    console.log('deposite', deposite, 'account', account);
-
-    // updateStatus('Verifying payment...');
-    // return _receipt;
+async function payBUSD(deposite, account, bUSDcontract) {
+    try {
+        const data = await bUSDcontract.transfer(_to, deposite);
+        await data.wait();
+        console.log('data.hash', data);
+        return data;
+    } catch (error) {
+        console.log('error', error);
+    }
 }
 
 async function getTotalSupply() {
@@ -61,32 +52,19 @@ async function getTotalSupply() {
 
 async function getTokenBalan(account) {
     try {
-        console.log('account', account);
-        const bUSDAddressd = env.busd_address;
-        const bUSDcontractd = new Contract(
-            bUSDAddressd,
-            bUSD_ABI.abi,
-            getSigner() // this will help us send transaction thereby making our communication to be secure
-        );
-        const balance = await bUSDcontractd.balanceOf(account);
-        console.log(Number(balance));
+        let balance = await bUSDcontract.balanceOf(account);
+        balance = (10 ** -18) * Number(balance);
+        console.log('balance', balance);
         return balance;
     } catch (error) {
         console.log('error', error);
     }
 }
 
-async function creditContractWithBUSD(bUSDcontract, account, _to, deposite) {
-    try {
-        let _receipt = await bUSDcontract.transfer(_to, deposite).send({ from: '0x424e4a2ad3a92ce9b4b617155db224ef34a53410' });
-        // let _receipt = await bUSDcontract.methods.transfer(_to, deposite).send({ from: account });
-        console.log('_receipt', _receipt);
-    } catch (error) {
 
-    }
-}
 
 function composeReceipt(receipt, _account, _to, _amount) {
+    console.log('receipt', receipt, '_account', _account, '_to', _to, '_amount', _amount);
     //Create receipt template.
     /* e.g
     {
@@ -103,13 +81,11 @@ function composeReceipt(receipt, _account, _to, _amount) {
     let receiptSummary = {};
     receiptSummary.blockNumber = receipt.blockNumber;
     receiptSummary.from_ = _account;
-    receiptSummary.to_ = receipt.to; //BUSD contract address;
+    receiptSummary.to_contract_addr = receipt.to; //BUSD contract address;
     receiptSummary.receiver = _to;  //receiver's address;
     receiptSummary.paymentTime = 1; //new Date().getTime(); Slight difference with the blockchain's timestammp.
     receiptSummary.value = _amount;
-    receiptSummary.transactionHash = receipt.transactionHash;
-
-    console.log('receiptSummary', receiptSummary);
+    receiptSummary.transactionHash = receipt.hash;
     return receiptSummary;
 }
 
@@ -138,37 +114,21 @@ async function inspectApplication(decision) {
 }
 
 
-async function apply(receipt) {
+async function apply(data, receipt) {
     // updateStatus('Submitting application...');
     //Call Hashurance engine then send details and receipt.
     //hashuranceABI = ;
     //hashuranceAddress = ;
-    hashurancecontract = await new window.web3.eth.Contract(hashuranceABI, hashuranceAddress);
+    // hashuranceContract = await new window.web3.eth.Contract(hashuranceABI, hashuranceAddress);
+    const extractData = { ...data, prequelID: '0' };
+    console.log('extractData', extractData);
+    let response = hashuranceContract.applyForInsurance(extractData, receipt);
+
+
     // let response = await hashurancecontract.methods.applyForInsurance("Phone screen", estimatedCost, 0, receipt).send({ from: account });
     // console.log(response);
     // updateStatus('Application submitted!!!');
 }
 
 
-
-// test 1
-async function payBUS(deposite) {
-    //Fill application form before this.
-    // updateStatus(`Processing payment...`);
-
-    // var bUSDAddress = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee';
-    // var bUSDcontract = await new window.web3.eth1.Contract(bUSD_AB, bUSDAddress);
-    // console.log('bUSDcontract', bUSDcontract);
-    // const account = await getCurrentAccount();
-    // var _to = '0xf49cF1a41604fe8b4db9C68551E5be493BEB6956';
-    // //var estimatedCost = Number(2000);
-    // var _receipt = await bUSDcontract.methods.transfer(_to, deposite).send({ from: account });
-    // console.log(_receipt);
-    // updateStatus('Verifying payment...');
-    // return _receipt;
-}
-
-
-
-// initiateBUSD();
-export { initialDeposit, getTokenBalan }
+export { initialDeposit, getTokenBalan, initiateBUSDContract, apply, initializeHashurance }

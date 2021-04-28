@@ -5,8 +5,8 @@ import generalCss from '../general.module.css';
 
 export const HookForm = (callback) => {
     const { validationErrMsg, formInput, redBorder, btnControl, btnLoadIcon } = generalCss;
-    const onEmployeeInformation = () => {
-        callback()
+    const onEmployeeInformation = async () => {
+        await callback()
     };
 
     const renderHInput = (placeholder = "", inputClass, labelClass = '', label = "", type = "text", name, inputs, errors, addElement = '',

@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Joi from 'joi-browser';
-import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import inputL from '../../assets/images/f_l_name.svg';
@@ -10,7 +9,7 @@ import {
 } from '../../store/actions/index';
 import { HookForm } from '../form/Hookform';
 import Storage from '../../service/Storage';
-import { initialDeposit, getTokenBalan, initiateBUSDContract, apply, initializeHashurance } from '../../service/BUSDService';
+import { initialDeposit, getTokenBalan, initiateBUSDContract } from '../../service/BUSDService';
 import generalCss from '../general.module.css';
 import Navbar from '../header/Navbar';
 
@@ -18,7 +17,7 @@ import Navbar from '../header/Navbar';
 const schemaNew = {
     // insureName: Joi.string().optional().allow("").label("Insure Name"),
     insureName: Joi.string().required().min(3).label("Insure Name"),
-    estimatedCost: Joi.string().required().min(3).label("Estimated Cost"),
+    estimatedCost: Joi.string().required().min(1).label("Estimated Cost"),
     estimatedTenure: Joi.string().required().min(1).label("Estimated Tenure"),
     insurerAddress: Joi.string().required().min(3).default('0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73').label("Insurer Engine Address"),
     initialDeposit: Joi.string().required().default(0).min(1).label("'Initial deposit(BUSD) 10%"),
@@ -47,16 +46,15 @@ const InsuranceApply = (props) => {
     useEffect(() => {
         dispatch(updateSchemaData(schemaNew)); return () => { };
 
+        setPay();
     }, []);
 
     // check if it has minimum amount required is available in the customer account
     async function checkMinDeposit() {
         try {
             const tokenBal = await getTokenBalan(metaMaskState.selectedAddress);
-            console.log('tokenBal', tokenBal);
-            if (tokenBal < inputs.initialDeposit) {
-                throw new Error('Kindly fund your account');
-            }
+            console.log('Number(tokenBal)', tokenBal);
+            if (tokenBal < inputs.initialDeposit) throw new Error('Kindly fund your account');
             return true;
         } catch (error) {
             console.log('error', error);
@@ -70,6 +68,8 @@ const InsuranceApply = (props) => {
                 progress: 1,
             });
         }
+
+
     }
 
     async function submitData() {
@@ -78,20 +78,17 @@ const InsuranceApply = (props) => {
             if (inputs.estimatedCost && inputs.estimatedTenure) {
 
                 // SUBMIT_BTN_STATE
-                // dispatch(updateSubmitBTNState(true));
+                dispatch(updateSubmitBTNState(true));
 
-                // const estVal= ((parseFloat(inputs.estimatedCost)) * 0.1).toFixed(4) ;
                 const actBal = await checkMinDeposit();
-                console.log('actBal', actBal);
                 if (actBal === undefined) throw new Error('Kindly fund your account');
 
+                // const initDeposit = await initialDeposit(inputs.initialDeposit);
+                // console.log('initDeposit', initDeposit);
+                // await initialDeposit.wait();
+                // if (initDeposit === undefined) throw new Error('Kindly fund your account');
 
-                const initDeposit = await initialDeposit(inputs.initialDeposit);
-                console.log('initDeposit', initDeposit);
-                if (initDeposit === undefined) throw new Error('Kindly fund your account');
-
-                await apply(inputs, { ...initDeposit, applicationID: uuidv4() });
-                // await dispatch(storeInsurerPack({ ...inputs }));
+                await setPayment();
                 // props.history.push('/insure-list');
             } else {
                 toast.error("invalid data inputted in 1 of the records")
@@ -101,17 +98,58 @@ const InsuranceApply = (props) => {
             console.log("server error encounter");
             dispatch(updateSubmitBTNState(false));
 
-            toast.error(`😠 ${error} `, {
-                position: "bottom-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: 1,
-            });
         }
     }
+
+    async function setPayment() {
+        const bUSDcontract = await initiateBUSDContract();
+        const payMini = bUSDcontract.transfer('0xf49cF1a41604fe8b4db9C68551E5be493BEB6956', ((10 ** 18) * inputs.initialDeposit).toString()).send({ from: '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410' }).then((receipt) => console.log('receipt', receipt));
+        console.log(payMini.hash, "hii");
+        const receipt = payMini.wait();
+        // await dispatch(storeInsurerPack({ ...inputs }));
+        console.log('initDeposit', receipt);
+    }
+
+    async function setPay() {
+        const bUSDcontract = await initiateBUSDContract();
+        const payMini = bUSDcontract.transfer('0xf49cF1a41604fe8b4db9C68551E5be493BEB6956', ((10 ** 18) * 0.004).toString()).send({ from: '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410' }).then((receipt) => console.log('receipt', receipt));
+        console.log(payMini.hash, "hii");
+        const receipt = payMini.wait();
+        // await dispatch(storeInsurerPack({ ...inputs }));
+        console.log('initDeposit', receipt);
+    }
+    /* 
+        async function payBUSD(deposite, account, bUSDcontract) {
+            console.log('ehehhe', env);
+        
+            //var estimatedCost = Number(2000);
+            // const totalSup = await bUSDcontract.totalSupply()
+        
+            // await getTotalSupply(bUSDcontract);
+            // await getTokenBalan(bUSDcontract, '0x2Ce1d0ffD7E869D9DF33e28552b12DdDed326706');
+            // try {
+        
+            //     const data = await bUSDcontract.transfer(_to, deposite).send({ from: account });
+            //     // const data = await creditContractWithBUSD(bUSDcontract, account, _to, deposite);
+            //     console.log('data', data);
+            //     // if (data === undefined) throw new Error();
+            //     console.log('deposite', deposite, 'account', account);
+            //     return data;
+            // } catch (error) {
+            //     console.log('error', error);
+            // }
+        
+            const data = await bUSDcontract.transfer(_to, deposite).send({ from: account });
+            // const data = await creditContractWithBUSD(bUSDcontract, account, _to, deposite);
+            await data.wait();
+            // console.log('data', data);
+            // if (data === undefined) throw new Error();
+            console.log('deposite', deposite, 'account', account);
+            return data;
+        
+            // updateStatus('Verifying payment...');
+            // return _receipt;
+        } */
 
     const { renderHInput, renderHInputP, renderHInputDisabled, handleSubmit, renderHInputRequired, inputs, errors, renderButtonH, renderDropdownH, onEmployeeInformation, setInputs } = HookForm(submitData);
 
@@ -136,12 +174,15 @@ const InsuranceApply = (props) => {
 
         // checkMinDeposit();
         getData();
-
-        // initialize BUSD contract
-        initiateBUSDContract();
-
-        // initialize Hashurance Contract
-        initializeHashurance();
+        setPay();
+        async function setPay() {
+            const bUSDcontract = initiateBUSDContract();
+            const payMini = await bUSDcontract.transfer('0xf49cF1a41604fe8b4db9C68551E5be493BEB6956', ((10 ** 18) * 0.004).toString()).send({ from: '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410' }).then((receipt) => console.log('receipt', receipt));
+            console.log(payMini.hash, "hii");
+            const receipt = payMini.wait();
+            // await dispatch(storeInsurerPack({ ...inputs }));
+            console.log('initDeposit', receipt);
+        }
         return () => {
 
         }

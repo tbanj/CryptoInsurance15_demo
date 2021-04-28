@@ -79,19 +79,31 @@
     {
       "inputs": [
         {
-          "internalType": "string",
-          "name": "insuring",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "cost",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "prequel",
-          "type": "uint256"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "insureName",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "estimatedCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prequelID",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct _Insurengine.inputApplyForm",
+          "name": "inputData",
+          "type": "tuple"
         },
         {
           "components": [

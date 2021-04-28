@@ -32,6 +32,8 @@ contract _Insurengine{
       uint prequelID;          //Previous application Id if this is a re-application.
     }
 
+    
+
   struct receiptTemplate{
         uint blockNumber;
         address from_;
@@ -40,6 +42,13 @@ contract _Insurengine{
         uint paymentTime;
         uint value;
         uint transactionHash;
+    }
+
+    struct inputApplyForm{
+        string whatToInsure; 
+        uint estimatedCost;  
+        uint applicationID;  
+        uint prequelID;    
     }
 
   constructor(address vHubAddress){
@@ -66,14 +75,18 @@ contract _Insurengine{
   }
 
    //Function to apply for an insurance.
-   // @prequel should be 0 if its a fresh insurance application.
-  function applyForInsurance(string memory insuring, uint cost, uint prequel, receiptTemplate memory receipt) public returns(bool){
+   // @inputData. prequel should be 0 if its a fresh insurance application.
+   // function applyForInsurance(string memory insuring, uint cost, uint prequel, receiptTemplate memory receipt) public returns(bool)
+  function applyForInsurance(inputApplyForm memory inputData, receiptTemplate memory receipt) public returns(bool){
+                                                
+       
        //Confirm and process funds.
        receipt.paymentTime = block.timestamp;
       hashuranceToken.updateDepoPool(applications.length, reformReceipt(receipt));
-
        //Submit application after successful transfer
-      ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, insuring, cost, block.timestamp, 0, 0, 0, "N/A", applications.length, prequel); //Application form filled, with approved variable set to false.
+     // ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, insuring, cost, block.timestamp, 0, 0, 0, "N/A", applications.length, prequel); //Application form filled, with approved variable set to false.
+     ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, inputData.insureName, inputData.estimatedCost, block.timestamp, 0, 0, 0, "N/A", inputData.applicationID, inputData.prequel); //Application form filled, with approved variable set to false.
+
       applications.push(newApplicationForm);
 
        //Add user to validator's court, since he now has hashurance tokens locked within the contract.
