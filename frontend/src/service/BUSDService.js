@@ -1,26 +1,62 @@
 import { ethers, Contract } from 'ethers';
 import bUSD_ABI from '../contracts/_BUSD.json';
+import hashurance_ABI from '../contracts/_Insurengine.json';
+import HashuranceToken_ABI from '../contracts/HashuranceToken.json';
 import env from '../env';
 import { getSelectedAccount, getSigner, getStoreDetails } from './helper';
-let hashuranceABI, hashuranceAddress, hashuranceContract;
+let hashuranceContract;
+let hashuranceTokenContract;
 const _to = env.hashurance_address;
 
 let bUSDcontract;
 function initiateBUSDContract() {
-    const bUSDAddress = env.busd_address;
+    // const bUSDAddress = env.busd_address;
+    const bUSDAddress = "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee";
     bUSDcontract = new Contract(
         bUSDAddress,
         bUSD_ABI.abi,
         getSigner() // this will help us send transaction thereby making our communication to be secure
     );
+    console.log('bUSDcontract kkk mm', bUSDcontract);
     return bUSDcontract;
 }
 
 function initializeHashurance() {
-    hashuranceContract = new Contract(hashuranceABI, hashuranceAddress);
+    const { metaMaskState } = getStoreDetails();
+    hashuranceContract = metaMaskState._insurengine;
+    console.log('hashuranceContract', hashuranceContract);
     return hashuranceContract;
 }
 
+function initializeHashuranceToken() {
+    hashuranceTokenContract = new Contract(
+        "0xec03337cd0A84d082Ca64D2bBfeA640cA5737571",
+        HashuranceToken_ABI.abi,
+        getSigner() // this will help us send transaction thereby making our communication to be secure
+    );
+    console.log('hashuranceTokenContract', hashuranceTokenContract);
+    return hashuranceTokenContract;
+}
+
+async function testHSHTApply() {
+    try {
+        // const update = await hashuranceTokenContract.updateDepoPool([2,
+        //     "0x424e4a2AD3A92cE9B4B617155dB224EF34a53410",
+        //     "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",
+        //     "0xDf4D56b47C5d1223f5FAbB49089e8AF7De418C24",
+        //     67545788, 10,
+        //     "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580", "dggdhdjjdjd"]);
+        // console.log('update.hash', update.hash);
+        // await update.wait();
+
+        const test = "Wale";
+        const update = await hashuranceTokenContract.updateData(test);
+        await update.wait();
+        console.log('update', update);
+    } catch (error) {
+        console.log('error', error);
+    }
+}
 
 async function initialDeposit(amt) {
 
@@ -115,6 +151,7 @@ async function inspectApplication(decision) {
 
 
 async function apply(data, receipt) {
+    console.log('data', data, 'receipt', receipt);
     // updateStatus('Submitting application...');
     //Call Hashurance engine then send details and receipt.
     //hashuranceABI = ;
@@ -122,13 +159,25 @@ async function apply(data, receipt) {
     // hashuranceContract = await new window.web3.eth.Contract(hashuranceABI, hashuranceAddress);
     const extractData = { ...data, prequelID: '0' };
     console.log('extractData', extractData);
-    let response = hashuranceContract.applyForInsurance(extractData, receipt);
+    console.log('hashuranceContract', hashuranceContract);
+    // let response = await hashuranceContract.applyForInsurance(extractData, receipt);
+    // let response = await hashuranceContract.applyForInsurance(["Laptop keybaord", "0.004", "89e63998-8beb-4db4-9c01-84e176bb8e64", "0", "0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73", "0.0004", "12"],
+    //     receipt);
 
+    let response = await hashuranceContract.applyForInsurance(extractData.insureName, extractData.estimatedCost, "0", receipt);
+    console.log('response', response);
+    await response.wait();
+    console.log('response', response);
 
+    // const response = await hashuranceContract.checkNetwork();
+    // console.log('response', response);
     // let response = await hashurancecontract.methods.applyForInsurance("Phone screen", estimatedCost, 0, receipt).send({ from: account });
     // console.log(response);
     // updateStatus('Application submitted!!!');
 }
 
 
-export { initialDeposit, getTokenBalan, initiateBUSDContract, apply, initializeHashurance }
+export {
+    initialDeposit, getTokenBalan, initiateBUSDContract, apply,
+    initializeHashurance, initializeHashuranceToken, testHSHTApply
+}

@@ -1,6 +1,18 @@
 pragma solidity ^0.8.0;
 
 contract HashuranceToken{
+
+    struct receiptTemplate{
+        uint blockNumber;
+        address from_;
+        address to_contract_addr;
+        address receiver;
+        uint paymentTime;
+        uint value;
+        string transactionHash;
+        string applicationID;
+    }
+
     address public Curator;
     string  public name = "Hashurance Token";                      
     string  public symbol = "HSHT";                             
@@ -11,17 +23,8 @@ contract HashuranceToken{
     mapping(address => uint256) public balances;
     mapping(address => mapping(address => uint256)) public allowed;
     //ApplicationID => receipt. Payment references to BUSD deposites;
-    mapping(uint => receiptTemplate)public receipts;  //Still not so secure.
+    mapping(string => receiptTemplate)public receipts;  //Still not so secure.
 
-    struct receiptTemplate{
-        uint blockNumber;
-        address from_;
-        address to_;
-        address receiver;
-        uint paymentTime;
-        uint value;
-        uint transactionHash;
-    }
 
     event Transfer(
         address indexed _from,
@@ -50,9 +53,10 @@ contract HashuranceToken{
         initDepositesTotal = 0;
     }
 
+    // set modifier
     modifier onlyCurator{
         require(msg.sender == Curator);
-        _;
+        _; 
     }
 
     // Return total amount of tokens
@@ -60,7 +64,7 @@ contract HashuranceToken{
         return totalSupply_;
     }
 
-    function getReceipt(uint idKey)public view returns(receiptTemplate memory){
+    function getReceipt(string memory idKey)public view returns(receiptTemplate memory){
         return receipts[idKey];
     }
 
@@ -114,13 +118,25 @@ contract HashuranceToken{
         emit Transfer(_from, _to, _value);
         return true;
     }
-
-    //Used to store the total equivalent amount of application deposites prior approval.
-    //Later tranfer to policy contract address after approval and creation.
-    function updateDepoPool(uint applicationID, receiptTemplate memory _receipt) public onlyCurator{  //Only the Hushurance engine can create tellers.
-        uint _value = _receipt.value;
+   
+    /* Used to store the total equivalent amount of application deposites prior approval.
+    Later tranfer to policy contract address after approval and creation.
+    Error Answer: The error which the function formerly has passing OnlyCurator to call updateDepoPool
+    function
+    */
+     function updateDepoPool(receiptTemplate memory _receipt) public {
+    // function updateDepoPool() public onlyCurator {  //Only the Hushurance engine can create tellers.
+        
+        // receiptTemplate memory _receipt = receiptTemplate(2,
+        // 0x424e4a2AD3A92cE9B4B617155dB224EF34a53410,
+        // 0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee, 
+        // 0xDf4D56b47C5d1223f5FAbB49089e8AF7De418C24,  
+        // 67545788, 10, 
+        // 0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580, "dggdhdjjdjd");
+        string memory applicationID = _receipt.applicationID;
+        uint _value = _receipt[0].value;
         require(balances[Curator] >= _value);
-        receipts[applicationID] = _receipt; //Store the BUSD payment receipt.
+        receipts[applicationID] = _receipt[0]; //Store the BUSD payment receipt.
         
         //Compute the Hashurance equivalent of BUSD (value) sent.
         //Assuming 1HSHT = 1BUSD. NOTE this will not always be the case.
@@ -130,17 +146,27 @@ contract HashuranceToken{
         emit Pendings(Curator, _value);
     }
 
-    function purgeDepoPool(uint appliId, address to_, uint _value)public{
+    function purgeDepoPool(string memory appliId, address to_contract_addr, uint _value)public{
         require(initDepositesTotal > _value);
          //Can only use this function if you are the user that deposited BUSD.
         address who = receipts[appliId].from_;
         require(who == msg.sender);
         initDepositesTotal -= _value;
-        transfer(to_, _value);
+        transfer(to_contract_addr, _value);
     }
 
-    // to get token name
-function getTokenName() public view returns(string memory) {
+     // to get token name
+    function getTokenName() public view onlyCurator returns(string memory)  {
       return name;
   }
+
+  function getReceipts(string memory _appliId) public view returns(receiptTemplate memory) {
+      return receipts[_appliId];
+  }
+
+  function getDepositesTotals() public view returns(uint256){
+      return initDepositesTotal;
+  }
+
+  
 }

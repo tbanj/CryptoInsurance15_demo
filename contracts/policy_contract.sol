@@ -2,7 +2,7 @@ pragma solidity ^0.8.0;
 import "./Hashurance_T.sol";        //Imports Hashurance token
 
 contract Policy{
-  uint public ApprovedapplyId;
+  string public ApprovedapplyId;
   address public policy_Holder;
   string public InsuredItem;
   uint public CreationTime;
@@ -25,11 +25,11 @@ contract Policy{
 
   constructor(
       address holder, 
-      uint applyId, 
+      string memory applyId, 
       string memory insured, 
       uint principal,
       uint initialPayment,
-      uint paymentTime,
+      uint paymentTime, //1478431966
       address HSHTaddress){
     policy_Holder = holder;
     ApprovedapplyId = applyId;

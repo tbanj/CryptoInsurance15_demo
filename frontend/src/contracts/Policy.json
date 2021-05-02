@@ -9,9 +9,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "string",
           "name": "applyId",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "internalType": "string",
@@ -47,9 +47,9 @@
       "name": "ApprovedapplyId",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "string",
           "name": "",
-          "type": "uint256"
+          "type": "string"
         }
       ],
       "stateMutability": "view",
@@ -121,6 +121,19 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "claim",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -141,6 +154,36 @@
     },
     {
       "inputs": [],
+      "name": "computeVariables",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "toApproveCount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "toDenyCount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "finalDecision",
+          "type": "uint256"
+        }
+      ],
+      "name": "enterInspectionResult",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "finalDecision",
       "outputs": [
         {
@@ -150,6 +193,63 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getNextPaymentAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getNextPaymentTime",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicyHolder",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "payTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "payAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "logPremiumHistory",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -224,6 +324,19 @@
       "type": "function"
     },
     {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "HSHTAddress",
+          "type": "address"
+        }
+      ],
+      "name": "prepForWithdrawal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "name": "reasonForDenial",
       "outputs": [
@@ -283,125 +396,12 @@
     },
     {
       "inputs": [],
-      "name": "claim",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "payTime",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "payAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "logPremiumHistory",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getNextPaymentTime",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getNextPaymentAmount",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "validityStatus",
       "outputs": [
         {
           "internalType": "string",
           "name": "validity",
           "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "computeVariables",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "toApproveCount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "toDenyCount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "finalDecision",
-          "type": "uint256"
-        }
-      ],
-      "name": "enterInspectionResult",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "HSHTAddress",
-          "type": "address"
-        }
-      ],
-      "name": "prepForWithdrawal",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getPolicyHolder",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
         }
       ],
       "stateMutability": "view",

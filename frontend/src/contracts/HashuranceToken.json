@@ -98,6 +98,30 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "remaining",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "",
           "type": "address"
         },
@@ -122,11 +146,67 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
       ],
       "name": "balances",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "circulatingSupply",
       "outputs": [
         {
           "internalType": "uint256",
@@ -165,6 +245,154 @@
     },
     {
       "inputs": [],
+      "name": "getDepositesTotals",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "idKey",
+          "type": "string"
+        }
+      ],
+      "name": "getReceipt",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "blockNumber",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "from_",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "to_contract_addr",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "receiver",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "paymentTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "transactionHash",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashuranceToken.receiptTemplate",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_appliId",
+          "type": "string"
+        }
+      ],
+      "name": "getReceipts",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "blockNumber",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "from_",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "to_contract_addr",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "receiver",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "paymentTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "value",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "transactionHash",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct HashuranceToken.receiptTemplate",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTokenName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "initDepositesTotal",
       "outputs": [
         {
@@ -192,9 +420,32 @@
     {
       "inputs": [
         {
+          "internalType": "string",
+          "name": "appliId",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "to_contract_addr",
+          "type": "address"
+        },
+        {
           "internalType": "uint256",
-          "name": "",
+          "name": "_value",
           "type": "uint256"
+        }
+      ],
+      "name": "purgeDepoPool",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
         }
       ],
       "name": "receipts",
@@ -211,7 +462,7 @@
         },
         {
           "internalType": "address",
-          "name": "to_",
+          "name": "to_contract_addr",
           "type": "address"
         },
         {
@@ -230,9 +481,14 @@
           "type": "uint256"
         },
         {
-          "internalType": "uint256",
+          "internalType": "string",
           "name": "transactionHash",
-          "type": "uint256"
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "applicationID",
+          "type": "string"
         }
       ],
       "stateMutability": "view",
@@ -253,19 +509,6 @@
     },
     {
       "inputs": [],
-      "name": "totalSupply_",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
       "name": "totalSupply",
       "outputs": [
         {
@@ -278,64 +521,8 @@
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "idKey",
-          "type": "uint256"
-        }
-      ],
-      "name": "getReceipt",
-      "outputs": [
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "blockNumber",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "from_",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "to_",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "receiver",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "paymentTime",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "transactionHash",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct HashuranceToken.receiptTemplate",
-          "name": "",
-          "type": "tuple"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [],
-      "name": "circulatingSupply",
+      "name": "totalSupply_",
       "outputs": [
         {
           "internalType": "uint256",
@@ -344,73 +531,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        }
-      ],
-      "name": "balanceOf",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_owner",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_spender",
-          "type": "address"
-        }
-      ],
-      "name": "allowance",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "remaining",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "success",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -469,11 +589,6 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "applicationID",
-          "type": "uint256"
-        },
-        {
           "components": [
             {
               "internalType": "uint256",
@@ -487,7 +602,7 @@
             },
             {
               "internalType": "address",
-              "name": "to_",
+              "name": "to_contract_addr",
               "type": "address"
             },
             {
@@ -506,9 +621,14 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "transactionHash",
-              "type": "uint256"
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
             }
           ],
           "internalType": "struct HashuranceToken.receiptTemplate",
@@ -519,42 +639,6 @@
       "name": "updateDepoPool",
       "outputs": [],
       "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "appliId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "to_",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_value",
-          "type": "uint256"
-        }
-      ],
-      "name": "purgeDepoPool",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getTokenName",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
       "type": "function"
     }
   ],

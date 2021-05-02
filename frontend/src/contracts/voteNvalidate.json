@@ -2,59 +2,21 @@
   "contractName": "voteNvalidate",
   "abi": [
     {
-      "inputs": [],
-      "name": "numOfValidators",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "address",
-          "name": "",
+          "name": "newValidator",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "value",
           "type": "uint256"
         }
       ],
-      "name": "validationRegister",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "validators",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
+      "name": "addToCourt",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -126,21 +88,59 @@
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "numOfValidators",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
-          "name": "newValidator",
+          "name": "",
           "type": "address"
         },
         {
           "internalType": "uint256",
-          "name": "value",
+          "name": "",
           "type": "uint256"
         }
       ],
-      "name": "addToCourt",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "validationRegister",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "validators",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {

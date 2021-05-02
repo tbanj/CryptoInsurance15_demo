@@ -1,0 +1,194 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_score",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_class",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_addr",
+                "type": "address"
+            }
+        ],
+        "name": "addStudent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "score",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct StructTest.InputStudent",
+                "name": "inputStudent",
+                "type": "tuple"
+            }
+        ],
+        "name": "addStudentStruct",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_addr",
+                "type": "address"
+            }
+        ],
+        "name": "deleteStudents",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "score",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "class",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct StructTest.Student",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "s",
+                "type": "string"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "score",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "class",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct StructTest.Student",
+                "name": "b",
+                "type": "tuple"
+            }
+        ],
+        "name": "foo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_addr",
+                "type": "address"
+            }
+        ],
+        "name": "getStudent",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "score",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "class",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address",
+                        "name": "addr",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct StructTest.Student",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "students",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "score",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "class",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "y",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

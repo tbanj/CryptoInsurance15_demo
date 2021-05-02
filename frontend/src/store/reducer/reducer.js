@@ -1,9 +1,10 @@
 import * as actionTypes from '../actions/index';
 const initialState = {
     status: false, posts: [], submitBTN: false, schemaDetail: {}, userData: [], insureData: {},
+
     metaMaskState: {
         isConnected: false, selectedAddress: undefined, chainId: undefined,
-        hashuranceContractAddress: undefined
+        hashuranceContractAddress: undefined, _insurengine: undefined
     }
 }
 // const [userToken, setUserToken] = useState({});

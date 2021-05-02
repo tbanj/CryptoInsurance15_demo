@@ -79,31 +79,19 @@
     {
       "inputs": [
         {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "insureName",
-              "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "estimatedCost",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "applicationID",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "prequelID",
-              "type": "uint256"
-            }
-          ],
-          "internalType": "struct _Insurengine.inputApplyForm",
-          "name": "inputData",
-          "type": "tuple"
+          "internalType": "string",
+          "name": "insuring",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "cost",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "prequel",
+          "type": "uint256"
         },
         {
           "components": [
@@ -119,7 +107,7 @@
             },
             {
               "internalType": "address",
-              "name": "to_",
+              "name": "to_contract_addr",
               "type": "address"
             },
             {
@@ -264,6 +252,71 @@
           "internalType": "struct _Insurengine.ApplicationForm",
           "name": "",
           "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getApplications",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "applicant",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "whatToInsure",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "estimatedCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "toApproveCount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "toDenyCount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "finalDecision",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "reasonForDenial",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prequelID",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct _Insurengine.ApplicationForm[]",
+          "name": "",
+          "type": "tuple[]"
         }
       ],
       "stateMutability": "view",
@@ -445,7 +498,7 @@
             },
             {
               "internalType": "address",
-              "name": "to_",
+              "name": "to_contract_addr",
               "type": "address"
             },
             {

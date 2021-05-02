@@ -50,7 +50,8 @@ export interface ImetaProps {
 
 export interface ImetamaskData {
     isConnected: boolean, selectedAddress: string | undefined, chainId: string | undefined,
-    hashuranceContractAddress: string | undefined
+    hashuranceContractAddress: string | undefined,
+    _insurengine: undefined
 }
 
 
@@ -96,7 +97,7 @@ class App extends React.Component<Props, State> {
         console.log('dataTest', dataTest[0]);
         const metamaskUpdate: ImetamaskData = {
             isConnected: provider.provider.isConnected(), selectedAddress: provider.provider.selectedAddress,
-            chainId: provider.provider.chainId, hashuranceContractAddress: _insurengine.address
+            chainId: provider.provider.chainId, hashuranceContractAddress: _insurengine.address, _insurengine
         };
         await this.props.updateMetamask(metamaskUpdate) as ImetamaskData;
         console.log('signer', signer);

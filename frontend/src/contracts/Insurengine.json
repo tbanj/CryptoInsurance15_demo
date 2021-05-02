@@ -79,19 +79,46 @@
     {
       "inputs": [
         {
-          "internalType": "string",
-          "name": "insuring",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "cost",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "prequel",
-          "type": "uint256"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "insureName",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "estimatedCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prequelID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "insurerAddress",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "initialDeposit",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "estimatedTenure",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct _Insurengine.inputApplyForm",
+          "name": "inputData",
+          "type": "tuple"
         },
         {
           "components": [
@@ -107,7 +134,7 @@
             },
             {
               "internalType": "address",
-              "name": "to_",
+              "name": "to_contract_addr",
               "type": "address"
             },
             {
@@ -145,6 +172,19 @@
         }
       ],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "checkNetwork",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -246,12 +286,142 @@
     },
     {
       "inputs": [],
+      "name": "getApplications",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "applicant",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "whatToInsure",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "estimatedCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "toApproveCount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "toDenyCount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "finalDecision",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "reasonForDenial",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "applicationID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prequelID",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct _Insurengine.ApplicationForm[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getHashTokenName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicies",
+      "outputs": [
+        {
+          "internalType": "contract Policy[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPoliciesCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPolicy",
+      "outputs": [
+        {
+          "internalType": "contract Policy[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "hashuranceToken",
       "outputs": [
         {
           "internalType": "contract HashuranceToken",
           "name": "",
           "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "networkTypeBSC",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -355,7 +525,7 @@
             },
             {
               "internalType": "address",
-              "name": "to_",
+              "name": "to_contract_addr",
               "type": "address"
             },
             {
