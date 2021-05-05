@@ -15,6 +15,7 @@ import {
     initialDeposit, getTokenBalan, initiateBUSDContract, apply,
     initializeHashurance, initializeHashuranceToken, testHSHTApply
 } from '../../service/BUSDService';
+import { testStructApply, initiateStructContract } from '../../service/structTest';
 import generalCss from '../general.module.css';
 import Navbar from '../header/Navbar';
 
@@ -123,7 +124,8 @@ const InsuranceApply = (props) => {
                 // await dispatch(storeInsurerPack({ ...inputs }));
                 // props.history.push('/insure-list');
 
-                testHSHTApply();
+                // testHSHTApply();
+                // await testStructApply();
             } else {
                 toast.error("invalid data inputted in 1 of the records")
                 dispatch(updateSubmitBTNState(false));
@@ -172,11 +174,14 @@ const InsuranceApply = (props) => {
         getData();
 
         // initialize BUSD contract
-        initiateBUSDContract();
+        // initiateBUSDContract();
 
         // initialize Hashurance Contract
-        initializeHashurance();
+        // initializeHashurance();
 
+
+        // test of structTest
+        // initiateStructContract();
 
 
         // after 10 secs

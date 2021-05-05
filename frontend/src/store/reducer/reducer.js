@@ -4,7 +4,7 @@ const initialState = {
 
     metaMaskState: {
         isConnected: false, selectedAddress: undefined, chainId: undefined,
-        hashuranceContractAddress: undefined, _insurengine: undefined
+        hashuranceContractAddress: undefined, _insurengine: undefined, networkId: undefined
     }
 }
 // const [userToken, setUserToken] = useState({});

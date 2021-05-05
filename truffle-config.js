@@ -79,13 +79,21 @@ module.exports = {
         // network_id: 2111,   // This network is yours, in the cloud.
         // production: true    // Treats this network as if it was a public net. (default: false)
         // }
+
+        // development: {
+        //     block_gas_limit: 40000000
+        // },
+
         bsc: {
             provider: () => new HDWalletProvider(privKey, 'https://data-seed-prebsc-1-s1.binance.org:8545'
             ),
             network_id: 97,
             skipDryRun: true,
+            gas: 8500000, // set this if you need higher gas fee
+            gasPrice: 10000000000, // set this if you need higher gas fee equal 1 GWEI
 
-        }
+
+        },
     },
 
     // Set default mocha options here, use special reporters etc.

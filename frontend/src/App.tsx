@@ -51,7 +51,7 @@ export interface ImetaProps {
 export interface ImetamaskData {
     isConnected: boolean, selectedAddress: string | undefined, chainId: string | undefined,
     hashuranceContractAddress: string | undefined,
-    _insurengine: undefined
+    _insurengine: undefined, networkId: number
 }
 
 
@@ -79,7 +79,7 @@ class App extends React.Component<Props, State> {
     }
 
     init = async () => {
-        const { _insurengine, provider, signer }: { _insurengine: any, provider: any, signer: any } = await getBlockchain();
+        const { _insurengine, provider, signer, networkId }: { _insurengine: any, provider: any, signer: any, networkId: number } = await getBlockchain();
         if ('checkNetwork()' in _insurengine === false) {
             this.setState({
                 _insurengine, data: 'Select Binance Smart Chain Test Network Required'
@@ -93,11 +93,14 @@ class App extends React.Component<Props, State> {
 
         // const dataTest = await Promise.all([_insurengine.checkNetwork(), _insurengine.totalSupply(), _insurengine.getHashTokenName()]);
         console.log('provider check metamask now', _insurengine);
+        console.log('networkId', networkId);
+
         const dataTest = await Promise.all([_insurengine.checkNetwork()]);
         console.log('dataTest', dataTest[0]);
         const metamaskUpdate: ImetamaskData = {
             isConnected: provider.provider.isConnected(), selectedAddress: provider.provider.selectedAddress,
-            chainId: provider.provider.chainId, hashuranceContractAddress: _insurengine.address, _insurengine
+            chainId: provider.provider.chainId, hashuranceContractAddress: _insurengine.address, _insurengine,
+            networkId
         };
         await this.props.updateMetamask(metamaskUpdate) as ImetamaskData;
         console.log('signer', signer);

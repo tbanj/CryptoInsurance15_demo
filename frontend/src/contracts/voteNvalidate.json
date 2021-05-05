@@ -1,5 +1,5 @@
 {
-  "contractName": "voteNvalidate",
+  "contractName": "voteNvalidateC",
   "abi": [
     {
       "inputs": [
@@ -22,9 +22,57 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
+          "internalType": "address",
+          "name": "_addr",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
           "name": "appId",
+          "type": "string"
+        }
+      ],
+      "name": "deleteValidator",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_addr",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "appId",
+          "type": "string"
+        }
+      ],
+      "name": "getValidator",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "appId",
+          "type": "string"
         },
         {
           "internalType": "uint256",
@@ -108,9 +156,9 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
+          "internalType": "string",
           "name": "",
-          "type": "uint256"
+          "type": "string"
         }
       ],
       "name": "validationRegister",

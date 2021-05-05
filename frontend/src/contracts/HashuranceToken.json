@@ -1,5 +1,5 @@
 {
-  "contractName": "HashuranceToken",
+  "contractName": "HashuranceTokenC",
   "abi": [
     {
       "inputs": [
@@ -309,7 +309,7 @@
               "type": "string"
             }
           ],
-          "internalType": "struct HashuranceToken.receiptTemplate",
+          "internalType": "struct HashuranceTokenC.receiptTemplate",
           "name": "",
           "type": "tuple"
         }
@@ -321,7 +321,7 @@
       "inputs": [
         {
           "internalType": "string",
-          "name": "_appliId",
+          "name": "applicationID",
           "type": "string"
         }
       ],
@@ -370,7 +370,7 @@
               "type": "string"
             }
           ],
-          "internalType": "struct HashuranceToken.receiptTemplate",
+          "internalType": "struct HashuranceTokenC.receiptTemplate",
           "name": "",
           "type": "tuple"
         }
@@ -589,54 +589,47 @@
     {
       "inputs": [
         {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "blockNumber",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "from_",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "to_contract_addr",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "receiver",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "paymentTime",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "transactionHash",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "applicationID",
-              "type": "string"
-            }
-          ],
-          "internalType": "struct HashuranceToken.receiptTemplate",
-          "name": "_receipt",
-          "type": "tuple"
+          "internalType": "uint256",
+          "name": "blockNumber",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_from_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_to_contract_addr",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_receiver",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_paymentTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_transactionHash",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_applicationID",
+          "type": "string"
         }
       ],
-      "name": "updateDepoPool",
+      "name": "updateDepoPoolEx",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

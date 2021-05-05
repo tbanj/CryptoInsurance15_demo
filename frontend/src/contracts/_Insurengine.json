@@ -1,5 +1,5 @@
 {
-  "contractName": "_Insurengine",
+  "contractName": "_InsurengineC",
   "abi": [
     {
       "inputs": [
@@ -63,9 +63,9 @@
           "type": "string"
         },
         {
-          "internalType": "uint256",
+          "internalType": "string",
           "name": "applicationID",
-          "type": "uint256"
+          "type": "string"
         },
         {
           "internalType": "uint256",
@@ -79,19 +79,46 @@
     {
       "inputs": [
         {
-          "internalType": "string",
-          "name": "insuring",
-          "type": "string"
-        },
-        {
-          "internalType": "uint256",
-          "name": "cost",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "prequel",
-          "type": "uint256"
+          "components": [
+            {
+              "internalType": "string",
+              "name": "insureName",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "estimatedCost",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "prequelID",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "insurerAddress",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "initialDeposit",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "estimatedTenure",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct _InsurengineC.inputApplyForm",
+          "name": "inputData",
+          "type": "tuple"
         },
         {
           "components": [
@@ -126,13 +153,18 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "transactionHash",
-              "type": "uint256"
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
             }
           ],
-          "internalType": "struct _Insurengine.receiptTemplate",
-          "name": "receipt",
+          "internalType": "struct _InsurengineC.receiptTemplate",
+          "name": "_receipt",
           "type": "tuple"
         }
       ],
@@ -176,12 +208,12 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "applId",
-          "type": "uint256"
+          "internalType": "string",
+          "name": "applicationID",
+          "type": "string"
         }
       ],
-      "name": "createPolicy",
+      "name": "createPolicyC",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -189,9 +221,9 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "applId",
-          "type": "uint256"
+          "internalType": "string",
+          "name": "applicationID",
+          "type": "string"
         }
       ],
       "name": "getAppication",
@@ -239,9 +271,9 @@
               "type": "string"
             },
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "applicationID",
-              "type": "uint256"
+              "type": "string"
             },
             {
               "internalType": "uint256",
@@ -249,7 +281,7 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct _Insurengine.ApplicationForm",
+          "internalType": "struct _InsurengineC.ApplicationForm",
           "name": "",
           "type": "tuple"
         }
@@ -304,9 +336,9 @@
               "type": "string"
             },
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "applicationID",
-              "type": "uint256"
+              "type": "string"
             },
             {
               "internalType": "uint256",
@@ -314,7 +346,7 @@
               "type": "uint256"
             }
           ],
-          "internalType": "struct _Insurengine.ApplicationForm[]",
+          "internalType": "struct _InsurengineC.ApplicationForm[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -340,7 +372,7 @@
       "name": "getPolicies",
       "outputs": [
         {
-          "internalType": "contract Policy[]",
+          "internalType": "contract PolicyC[]",
           "name": "",
           "type": "address[]"
         }
@@ -366,7 +398,7 @@
       "name": "getPolicy",
       "outputs": [
         {
-          "internalType": "contract Policy[]",
+          "internalType": "contract PolicyC[]",
           "name": "",
           "type": "address[]"
         }
@@ -376,10 +408,10 @@
     },
     {
       "inputs": [],
-      "name": "hashuranceToken",
+      "name": "hashuranceTokenC",
       "outputs": [
         {
-          "internalType": "contract HashuranceToken",
+          "internalType": "contract HashuranceTokenC",
           "name": "",
           "type": "address"
         }
@@ -411,7 +443,7 @@
       "name": "policyArchieve",
       "outputs": [
         {
-          "internalType": "contract Policy",
+          "internalType": "contract PolicyC",
           "name": "",
           "type": "address"
         }
@@ -451,9 +483,9 @@
     {
       "inputs": [
         {
-          "internalType": "uint256",
-          "name": "aFormID",
-          "type": "uint256"
+          "internalType": "string",
+          "name": "applicationID",
+          "type": "string"
         },
         {
           "internalType": "uint256",
@@ -517,12 +549,17 @@
               "type": "uint256"
             },
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "transactionHash",
-              "type": "uint256"
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "applicationID",
+              "type": "string"
             }
           ],
-          "internalType": "struct _Insurengine.receiptTemplate",
+          "internalType": "struct _InsurengineC.receiptTemplate",
           "name": "receipt",
           "type": "tuple"
         },
@@ -548,7 +585,7 @@
       "name": "validatorsHub",
       "outputs": [
         {
-          "internalType": "contract voteNvalidate",
+          "internalType": "contract voteNvalidateC",
           "name": "",
           "type": "address"
         }

@@ -1,7 +1,7 @@
 pragma solidity ^0.8.0;
 import "./Hashurance_T.sol";        //Imports Hashurance token
 
-contract Policy{
+contract PolicyC{
   string public ApprovedapplyId;
   address public policy_Holder;
   string public InsuredItem;
@@ -30,7 +30,7 @@ contract Policy{
       uint principal,
       uint initialPayment,
       uint paymentTime, //1478431966
-      address HSHTaddress){
+      address _HSHTaddress){
     policy_Holder = holder;
     ApprovedapplyId = applyId;
     InsuredItem = insured;
@@ -40,7 +40,7 @@ contract Policy{
     premiumDeadline = CreationTime + 2592000;//1 month from now
     totalPremiumPaid.push(initialPayment);
     //Rprofit = 0.3 * principal;
-    HSHTAddress = HSHTaddress;
+    HSHTAddress = _HSHTaddress;
   }
 
     function claim()public returns(bool){
@@ -82,7 +82,7 @@ contract Policy{
        }
     }
 
-    function enterInspectionResult(uint toApproveCount, uint toDenyCount, uint finalDecision)public{
+    function enterInspectionResult(uint _toApproveCount, uint _toDenyCount, uint _finalDecision)public{
         //Find another way to secure this function
         require(claimRequestCount.length > 0);
         if(finalDecision == 4){
@@ -91,9 +91,9 @@ contract Policy{
         }
     }
 
-    function prepForWithdrawal(address HSHTAddress)public{
+    function prepForWithdrawal(address _HSHTAddress)public{
         require(claimRequestCount.length > 0);
-        HashuranceToken HSHTobject = HashuranceToken(HSHTAddress);
+        HashuranceTokenC HSHTobject = HashuranceTokenC(_HSHTAddress);
         //Checks which case has occurred.
         if(totalPremiumPaid.length <= Principal){
             //Case 1: Total Pm < P.

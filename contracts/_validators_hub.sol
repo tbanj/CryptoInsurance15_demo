@@ -1,17 +1,17 @@
 pragma solidity ^0.8.0;
 
-contract voteNvalidate{
+contract voteNvalidateC{
     uint public numOfValidators; 
     mapping(address=>uint)public validators; //Hashurance token holder addresses and validator's reputation.
-    mapping(address=>mapping(uint=>uint)) public validationRegister; //Used to avoid a prevent a validator from validating more than once.
-    //ClaimApplications[] claim applications
+    mapping(address=>mapping(string=>uint)) public validationRegister; //Used to avoid a prevent a validator from validating more than once.
+    // ClaimApplications[] claim applications
     
     function getTotalValidations(uint appr, uint deny)private pure returns(uint){
         return appr + deny;
     }
 
     function inspect(
-        uint appId, 
+        string memory appId, 
         uint decision, 
         uint approveCount, 
         uint denyCount) public returns(uint[3] memory){
@@ -97,5 +97,16 @@ contract voteNvalidate{
 
     function vote() public{
 
+    }
+
+    
+    function deleteValidator(address _addr, string memory appId) public  returns(bool) {
+        delete validationRegister[_addr][appId];
+        return true;
+    }
+
+    function getValidator(address _addr, string memory appId) public view returns(uint) {
+        
+        return validationRegister[_addr][appId];
     }
 }

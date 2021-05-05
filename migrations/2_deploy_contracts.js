@@ -8,9 +8,13 @@ module.exports = function (deployer) {
   deployer.deploy(SimpleStorage, 'Alabi');
 }; */
 
-const _Insurengine = artifacts.require("_Insurengine");
+const _InsurengineC = artifacts.require("_InsurengineC");
+const StructTemi = artifacts.require("StructTemi");
 
 module.exports = function (deployer) {
-  deployer.deploy(_Insurengine, '0xDf4D56b47C5d1223f5FAbB49089e8AF7De418C24');
+  // deployer.deploy(StructTemi);
+  deployer.deploy(_InsurengineC, '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410');
+
+
 };
 

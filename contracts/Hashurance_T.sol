@@ -1,6 +1,6 @@
 pragma solidity ^0.8.0;
 
-contract HashuranceToken{
+contract HashuranceTokenC{
 
     struct receiptTemplate{
         uint blockNumber;
@@ -124,7 +124,7 @@ contract HashuranceToken{
     Error Answer: The error which the function formerly has passing OnlyCurator to call updateDepoPool
     function
     */
-     function updateDepoPool(receiptTemplate memory _receipt) public {
+     function updateDepoPool(receiptTemplate memory _receipt) private {
     // function updateDepoPool() public onlyCurator {  //Only the Hushurance engine can create tellers.
         
         // receiptTemplate memory _receipt = receiptTemplate(2,
@@ -134,9 +134,40 @@ contract HashuranceToken{
         // 67545788, 10, 
         // 0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580, "dggdhdjjdjd");
         string memory applicationID = _receipt.applicationID;
-        uint _value = _receipt[0].value;
+        uint _value = _receipt.value;
         require(balances[Curator] >= _value);
-        receipts[applicationID] = _receipt[0]; //Store the BUSD payment receipt.
+        receipts[applicationID] = _receipt; //Store the BUSD payment receipt.
+        
+        //Compute the Hashurance equivalent of BUSD (value) sent.
+        //Assuming 1HSHT = 1BUSD. NOTE this will not always be the case.
+        initDepositesTotal += _value; //Adds to the pool of depositors funds.
+        balances[Curator] -= _value;  //Deducts from curators funds.
+        circulatingSupply_ += _value; //Suspect this if bugs arise.
+        emit Pendings(Curator, _value);
+    }
+
+    function updateDepoPoolEx(uint blockNumber,
+        address _from_,
+        address _to_contract_addr,
+        address _receiver,
+        uint _paymentTime,
+        uint _value,
+        string memory _transactionHash,
+        string memory _applicationID) public {
+    // function updateDepoPoolEx() public onlyCurator {  //Only the Hushurance engine can create tellers.
+        
+        // receiptTemplate memory _receipt = receiptTemplate(2,
+        // 0x424e4a2AD3A92cE9B4B617155dB224EF34a53410,
+        // 0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee, 
+        // 0xDf4D56b47C5d1223f5FAbB49089e8AF7De418C24,  
+        // 67545788, 10, 
+        // 0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580, "dggdhdjjdjd");
+        string memory applicationID = _applicationID;
+        uint value = _value;
+        require(balances[Curator] >= value);
+        receiptTemplate memory _receipt = receiptTemplate(blockNumber, _from_, _to_contract_addr,
+         _receiver,_paymentTime, _value,_transactionHash, _applicationID);
+        receipts[applicationID] = _receipt; //Store the BUSD payment receipt.
         
         //Compute the Hashurance equivalent of BUSD (value) sent.
         //Assuming 1HSHT = 1BUSD. NOTE this will not always be the case.
@@ -160,8 +191,8 @@ contract HashuranceToken{
       return name;
   }
 
-  function getReceipts(string memory _appliId) public view returns(receiptTemplate memory) {
-      return receipts[_appliId];
+  function getReceipts(string memory applicationID) public view returns(receiptTemplate memory) {
+      return receipts[applicationID];
   }
 
   function getDepositesTotals() public view returns(uint256){

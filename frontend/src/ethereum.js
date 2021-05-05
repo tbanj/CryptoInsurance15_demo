@@ -14,6 +14,7 @@ const getBlockchain = () =>
 
             await provider.request({ method: 'eth_requestAccounts' });
             const networkId = await provider.request({ method: 'net_version' })
+            console.log('networkId', networkId);
             provider = new ethers.providers.Web3Provider(provider);
             const signer = provider.getSigner();
             /*  to check a user address
@@ -28,14 +29,14 @@ const getBlockchain = () =>
                 );
                 // console.log('{ _insurengine }', { _insurengine }, _Insurengine.networks[networkId].address);
                 console.log('provider', provider);
-                resolve({ _insurengine, provider, signer });
+                resolve({ _insurengine, provider, signer, networkId });
                 return;
             } else {
                 const _insurengine = { data: 'Select Required Metamask network' };
                 console.log('{ _insurengine }', { _insurengine });
                 // console.log(ethereum.isMetaMask);
 
-                resolve({ _insurengine, provider, signer });
+                resolve({ _insurengine, provider, signer, networkId });
                 return;
             }
 
