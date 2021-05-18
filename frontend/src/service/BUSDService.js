@@ -1,7 +1,7 @@
 import { ethers, Contract } from 'ethers';
 import bUSD_ABI from '../contracts/_BUSD.json';
-import hashurance_ABI from '../contracts/_Insurengine.json';
-import HashuranceToken_ABI from '../contracts/HashuranceToken.json';
+import hashurance_ABI from '../contracts/_InsurengineC.json';
+import HashuranceToken_ABI from '../contracts/HashuranceTokenC.json';
 import env from '../env';
 import { getSelectedAccount, getSigner, getStoreDetails } from './helper';
 let hashuranceContract;

@@ -119,7 +119,7 @@ const InsuranceApply = (props) => {
                 // BigNumber { _bn: <BN: 10f0cf064dd59200000> }
 
                 // const stringTest = ethers.utils.formatUnits(amount, decimalPlaces);
-                // await apply(extractData, receipt);
+                await apply(extractData, receipt);
                 // await apply({ ...inputs, applicationID: uuidv4() }, initDeposit);
                 // await dispatch(storeInsurerPack({ ...inputs }));
                 // props.history.push('/insure-list');

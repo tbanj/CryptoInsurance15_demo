@@ -1,5 +1,5 @@
 import { Contract } from 'ethers';
-import HASH_ABI from '../contracts/_Insurengine.json';
+import HASH_ABI from '../contracts/_InsurengineC.json';
 import env from '../env';
 import { getSelectedAccount, getSigner, getStoreDetails } from './helper';
 

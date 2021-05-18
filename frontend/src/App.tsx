@@ -60,6 +60,7 @@ export interface State {
     bscState: boolean,
     _insurengine: any,
     data: string | undefined,
+    selectedAddress: undefined,
 }
 
 
@@ -69,7 +70,8 @@ class App extends React.Component<Props, State> {
         this.state = {
             bscState: false,
             _insurengine: undefined,
-            data: undefined
+            data: undefined,
+            selectedAddress: undefined,
         }
     }
 
@@ -106,7 +108,7 @@ class App extends React.Component<Props, State> {
         console.log('signer', signer);
 
         storeSigner(signer);
-        this.setState({ _insurengine, bscState: dataTest[0] });
+        this.setState({ _insurengine, bscState: dataTest[0], selectedAddress: provider.provider.selectedAddress });
     };
 
 
@@ -114,16 +116,19 @@ class App extends React.Component<Props, State> {
 
 
     render() {
-        const { bscState, data }: { bscState: boolean, data: string | undefined } = this.state
+        const { bscState, data, selectedAddress }: { bscState: boolean, data: string | undefined, selectedAddress: undefined } = this.state;
+        let networkTest;
+        if (selectedAddress === null || bscState === false) {
+            networkTest = <div className="row">
+                <div className="text-center mt-5">
+                    <h1>{data}</h1>
+                </div>
+            </div>
+        }
         return (
             <Fragment>
                 <ToastContainer />
-                {bscState === false && <div className="row">
-                    <div className="text-center mt-5">
-                        <h1>{data}</h1>
-                    </div>
-                </div>}
-
+                {networkTest}
                 {bscState === true && <Router>
                     <ErrorBoundary>
                         <Suspense fallback={FullPageSpinner}>

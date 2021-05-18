@@ -2,7 +2,7 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ethers, Contract } from 'ethers';
 // import SimpleStorage from './contracts/SimpleStorage.json';
-import _Insurengine from './contracts/_Insurengine.json';
+import _Insurengine from './contracts/_InsurengineC.json';
 import _BUSD from './contracts/_BUSD.json';
 
 const getBlockchain = () =>
@@ -19,8 +19,6 @@ const getBlockchain = () =>
             const signer = provider.getSigner();
             /*  to check a user address
             ethereum.selectedAddress. */
-            console.log('networkId', _Insurengine.networks);
-            console.log('_Insurengine.networks[networkId].address', _Insurengine.networks[networkId].address);
             if (_Insurengine.networks[networkId]) {
                 const _insurengine = new Contract(
                     _Insurengine.networks[networkId].address,
