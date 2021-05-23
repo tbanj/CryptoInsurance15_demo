@@ -88,7 +88,7 @@ contract voteNvalidateC{
 
 
     //Adds a new validator to the validators hub.
-    function addToCourt(address newValidator, uint value)public{
+    function addToCourt(address newValidator, uint value) public{
         //Validator's reputation = (Number of good inspection * 1000000) + Hashurance token balance. 
         //Number of good inspection = 0, for new applicants.
         validators[newValidator] = value; //value 
@@ -106,7 +106,10 @@ contract voteNvalidateC{
     }
 
     function getValidator(address _addr, string memory appId) public view returns(uint) {
-        
         return validationRegister[_addr][appId];
+    }
+
+    function getNumOfValidators() public  returns(uint) {
+        return numOfValidators;
     }
 }

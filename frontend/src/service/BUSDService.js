@@ -157,16 +157,35 @@ async function apply(data, receipt) {
     //hashuranceABI = ;
     //hashuranceAddress = ;
     // hashuranceContract = await new window.web3.eth.Contract(hashuranceABI, hashuranceAddress);
-    const extractData = { ...data, prequelID: '0' };
+    const extractData = { ...data, prequelID: 0 };
     console.log('extractData', extractData);
     console.log('hashuranceContract', hashuranceContract);
+    const derm = {
+        "blockNumber": 7823037,
+        "from_": "0x827a16970788635726f2b4c6f94cd65622599075",
+        "to_contract_addr": "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",
+        "receiver": "0xf49cF1a41604fe8b4db9C68551E5be493BEB6956",
+        "paymentTime": 1,
+        "value": 7865,
+        "transactionHash": "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580",
+        "applicationID": "89e63998-8beb-4db4-9c01-84e176bb8e64"
+    }
+    // let response = await hashuranceContract.testInptData(receipt); // this work
+    // let response = await hashuranceContract.testInpt(extractData, receipt)
+    // let response = await hashuranceContract.testInptData([[80, "0x827a16970788635726f2b4c6f94cd65622599075", "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee", "0xf49cF1a41604fe8b4db9C68551E5be493BEB6956", 1, 7856, "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580", "89e63998-8beb-4db4-9c01-84e176bb8e64"
+    // ], extractData]);
+
+    // let response = await hashuranceContract.applyForInsurance(extractData, [80, "0x827a16970788635726f2b4c6f94cd65622599075", "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee", "0xf49cF1a41604fe8b4db9C68551E5be493BEB6956", 1, 7856, "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580", "89e63998-8beb-4db4-9c01-84e176bb8e64"
+    // ])
+    let response = await hashuranceContract.getChidNumOfValidators();
+
     // let response = await hashuranceContract.applyForInsurance(extractData, receipt);
     // let response = await hashuranceContract.applyForInsurance(["Laptop keybaord", "0.004", "89e63998-8beb-4db4-9c01-84e176bb8e64", "0", "0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73", "0.0004", "12"],
     //     receipt);
 
-    let response = await hashuranceContract.applyForInsurance(extractData.insureName, extractData.estimatedCost, "0", receipt);
+    // let response = await hashuranceContract.applyForInsurance(extractData.insureName, extractData.estimatedCost, "0", receipt);
     console.log('response', response);
-    await response.wait();
+    // await response.wait();
     console.log('response', response);
 
     // const response = await hashuranceContract.checkNetwork();

@@ -33,9 +33,9 @@ contract _InsurengineC{
 
     
 
-  struct receiptTemplate{
+  struct receiptTest {
         uint blockNumber;
-        address from_;
+        address from_; // use the address copy from etherscan or bscan not the one written through metamask
         address to_contract_addr;
         address receiver;
         uint paymentTime;
@@ -43,6 +43,13 @@ contract _InsurengineC{
         string transactionHash;
         string applicationID;
     }
+
+
+    struct valDouble {
+      receiptTest receiptTe;
+      inputApplyForm tempForm;
+    }
+
 
 //Stores all insurance applications, before they get approved and transformed to a policy.
     ApplicationForm[] public applications;
@@ -54,9 +61,8 @@ contract _InsurengineC{
       string applicationID;  
       uint prequelID;  
       string insurerAddress;
-      string initialDeposit;
-      string estimatedTenure;
-            
+      uint initialDeposit;
+      string estimatedTenure;      
     }
 
   constructor(address vHubAddress){
@@ -87,7 +93,7 @@ contract _InsurengineC{
 
     }
 
-  function submitPremium(address policyAddress, receiptTemplate memory receipt, uint direction)public returns(bool){
+  function submitPremium(address policyAddress, receiptTest memory receipt, uint direction)public returns(bool){
        //Confirm and process funds.
        receipt.paymentTime = block.timestamp; //Will later change this to the timestamp returned at the front end.
        hashuranceTokenC.transfer(policyAddress, receipt.value); //Move HSHT to policy contract.
@@ -100,31 +106,9 @@ contract _InsurengineC{
        return true;
   }
 
-   //Function to apply for an insurance.
-   // @inputData. prequel should be 0 if its a fresh insurance application.
-//    function applyForInsurance(string memory insuring, uint cost, uint prequel, receiptTemplate memory receipt) public returns(bool){
-  function applyForInsurance(inputApplyForm memory inputData, receiptTemplate memory _receipt) public returns(bool){
-                                                
-       
-       //Confirm and process funds.
-       _receipt.paymentTime = block.timestamp;
-       string memory appID = inputData.applicationID;
-       HashuranceTokenC.receiptTemplate memory _data = reformReceipt(_receipt);
-      hashuranceTokenC.updateDepoPoolEx(_data.blockNumber,
-      _data.from_, _data.to_contract_addr,
-      _data.receiver, _data.paymentTime, _data.value,
-      _data.transactionHash, _data.applicationID);
-       //Submit application after successful transfer
-     // ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, insuring, cost, block.timestamp, 0, 0, 0, "N/A", applications.length, prequel); //Application form filled, with approved variable set to false.
-      ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, inputData.insureName, inputData.estimatedCost, block.timestamp, 0, 0, 0, "N/A", inputData.applicationID, inputData.prequelID); //Application form filled, with approved variable set to false.
-      applications.push(newApplicationForm);
+  
 
-       //Add user to validator's court, since he now has hashurance tokens locked within the contract.
-      validatorsHub.addToCourt(msg.sender, _receipt.value);/////////////////
-      return true;
-    }
-
-    function reformReceipt(receiptTemplate memory _receipt_)private view returns(HashuranceTokenC.receiptTemplate memory){
+    function reformReceipt(receiptTest memory _receipt_)private view returns(HashuranceTokenC.receiptTemplate memory){
       //Transfer BUSD to Hashurance Engine at frontend and wait for a response (transaction hash).
       //Use the response to create a receipt then call this function.
 
@@ -133,12 +117,15 @@ contract _InsurengineC{
     
     
       HashuranceTokenC.receiptTemplate memory receipt_toToken;  //Expensive means, but it can work till we find an alternative. 
-      receipt_toToken.from_ = _receipt_.from_;
+    
+    receipt_toToken.from_ = _receipt_.from_;
       receipt_toToken.to_contract_addr = _receipt_.to_contract_addr;
       receipt_toToken.paymentTime = block.timestamp;
       receipt_toToken.receiver = _receipt_.receiver;
       receipt_toToken.value = _receipt_.value;
       receipt_toToken.transactionHash = _receipt_.transactionHash;
+      receipt_toToken.applicationID = _receipt_.applicationID;
+    receipt_toToken.blockNumber = _receipt_.blockNumber;
       return receipt_toToken;
   }
 
@@ -255,5 +242,35 @@ function getHashTokenName() external view returns(string memory) {
       return applications;
   } 
 
+  function testInpt(inputApplyForm memory inputData, receiptTest memory _receipt) public returns(uint, string memory){
 
+      string memory appId= _receipt.applicationID;
+      uint est = inputData.estimatedCost;
+      return (est,appId);
+  }
+
+  function applyForInsurance(inputApplyForm memory inputData, receiptTest memory _receipt) public   returns(bool){
+
+     
+  //Confirm and process funds.
+       _receipt.paymentTime = block.timestamp;
+       string memory appID = inputData.applicationID;
+       receiptTest memory _dataSt = receiptTest(_receipt.blockNumber, _receipt.from_, _receipt.to_contract_addr,_receipt.receiver, _receipt.paymentTime, _receipt.value, _receipt.transactionHash, _receipt.applicationID);
+
+      HashuranceTokenC.receiptTemplate memory _data = reformReceipt(_dataSt);
+      hashuranceTokenC.updateDepoPoolEx(_data.blockNumber,
+      _data.from_, _data.to_contract_addr,
+      _data.receiver, _data.paymentTime, _data.value,
+      _data.transactionHash, _data.applicationID);
+     ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, inputData.insureName, inputData.estimatedCost, block.timestamp, 0, 0, 0, "N/A", inputData.applicationID, inputData.prequelID); //Application form filled, with approved variable set to false.
+      applications.push(newApplicationForm);
+    
+    //Add user to validator's court, since he now has hashurance tokens locked within the contract.
+      validatorsHub.addToCourt(msg.sender, _receipt.value);
+      return true;
+  }
+
+function getChidNumOfValidators() public  returns(uint){
+      return validatorsHub.getNumOfValidators();
+  }
 }

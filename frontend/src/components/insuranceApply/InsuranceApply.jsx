@@ -94,24 +94,33 @@ const InsuranceApply = (props) => {
                 // const initDeposit = await initialDeposit(inputs.initialDeposit);
                 // console.log('initDeposit', initDeposit);
                 // if (initDeposit === undefined) throw new Error('Kindly fund your account');
+                // const estCost = ethers.utils.parseEther('2000.0');
+                // console.log('Object.keys(estCost)', Object.keys(estCost));
+                // const initDe = ethers.utils.parseEther('20.0');
+                var decimalPlaces = 18;
 
+                var convertVal = ethers.utils.parseUnits('5.0', decimalPlaces);
+                console.log('convertVal', convertVal);
                 const extractData = {
                     "insureName": "Laptop keybaord",
-                    "estimatedCost": 2,
+                    "estimatedCost": 2000,
                     "estimatedTenure": "12",
                     "insurerAddress": "0xf46dc2B14e4A493135293eBD24Ae07d90cd76B73",
-                    "initialDeposit": 2,
+                    "initialDeposit": 20,
                     "applicationID": "89e63998-8beb-4db4-9c01-84e176bb8e64",
-                }
+                };
+
                 const receipt = {
                     "blockNumber": null,
                     "from_": "0x424e4a2ad3a92ce9b4b617155db224ef34a53410",
                     "to_contract_addr": "0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee",
                     "receiver": "0xf49cF1a41604fe8b4db9C68551E5be493BEB6956",
                     "paymentTime": 1,
-                    "value": "0.0004",
-                    "transactionHash": "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580"
-                }
+                    // "value": convertVal._hex,
+                    "transactionHash": "0x77cdc6215ec865c8967ab8365ccc2a9fd2ad8288c63aee96f13450ad304cf580",
+                    "applicationID": "89e63998-8beb-4db4-9c01-84e176bb8e64",
+                };
+
 
                 var decimalPlaces = 18;
 
@@ -156,6 +165,9 @@ const InsuranceApply = (props) => {
             try {
                 await setInputs({ ...userData });
 
+                // initialize Hashurance Contract
+                initializeHashurance();
+
                 // initialize HashuranceToken Contract
                 initializeHashuranceToken();
             } catch (error) {
@@ -176,8 +188,7 @@ const InsuranceApply = (props) => {
         // initialize BUSD contract
         // initiateBUSDContract();
 
-        // initialize Hashurance Contract
-        // initializeHashurance();
+
 
 
         // test of structTest

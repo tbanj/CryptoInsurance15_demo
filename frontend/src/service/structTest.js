@@ -49,7 +49,7 @@ async function testStructApply() {
         // console.log('update.hash', update.hash);
         // await update.wait();
 
-        const val = { "score": 400, class: "ss2", "addr": "0x424e4a2AD3A92cE9B4B617155dB224EF34a53410" };
+        const val = { "score": 400, "class": "ss2", "addr": "0x424e4a2AD3A92cE9B4B617155dB224EF34a53410" };
         const text = "Hello";
 
         const update = await structTokenContract.addStudentStructSingText(text, val);

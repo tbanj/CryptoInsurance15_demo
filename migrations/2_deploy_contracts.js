@@ -11,9 +11,9 @@ module.exports = function (deployer) {
 const _InsurengineC = artifacts.require("_InsurengineC");
 const StructTemi = artifacts.require("StructTemi");
 
-module.exports = function (deployer) {
-  deployer.deploy(StructTemi);
-  deployer.deploy(_InsurengineC, '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410');
+module.exports = async function (deployer) {
+  // await deployer.deploy(StructTemi);
+  await deployer.deploy(_InsurengineC, '0x424e4a2AD3A92cE9B4B617155dB224EF34a53410');
 
 
 };
