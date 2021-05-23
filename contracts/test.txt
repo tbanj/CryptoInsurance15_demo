@@ -1,0 +1,20 @@
+function applyForInsurance(inputApplyForm memory inputData, receiptTest memory _receipt) public returns(bool){
+
+     
+  //Confirm and process funds.
+       _receipt.paymentTime = block.timestamp;
+       string memory appID = inputData.applicationID;
+       receiptTest memory _dataSt = receiptTest(_receipt.blockNumber, _receipt.from_, _receipt.to_contract_addr,_receipt.receiver, _receipt.paymentTime, _receipt.value, _receipt.transactionHash, _receipt.applicationID);
+
+       HashuranceTokenC.receiptTemplate memory _data = reformReceipt(_dataSt);
+      hashuranceTokenC.updateDepoPoolEx(_data.blockNumber,
+      _data.from_, _data.to_contract_addr,
+      _data.receiver, _data.paymentTime, _data.value,
+      _data.transactionHash, _data.applicationID);
+      ApplicationForm memory newApplicationForm = ApplicationForm(msg.sender, inputData.insureName, inputData.estimatedCost, block.timestamp, 0, 0, 0, "N/A", inputData.applicationID, inputData.prequelID); //Application form filled, with approved variable set to false.
+      applications.push(newApplicationForm);
+
+       //Add user to validator's court, since he now has hashurance tokens locked within the contract.
+      validatorsHub.addToCourt(msg.sender, _receipt.value);
+      return true;
+  }
